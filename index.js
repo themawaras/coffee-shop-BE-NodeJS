@@ -319,24 +319,24 @@ const db = require("./src/Configs/postgres");
 //   }
 // });
 
-server.get("/products/search", async (req, res) => {
-  try {
-    const { query } = req;
-    const sql = `select p.product_name as "Nama Produk", p.product_desc as "Deskripsi", p.category_id as "Kategori" from products p where p.product_name ilike $1 order by p.product_name  asc;`;
-    const values = [`%${query.product_name}%`];
-    const data = await db.query(sql, values);
+// server.get("/products/search", async (req, res) => {
+//   try {
+//     const { query } = req;
+//     const sql = `select p.product_name as "Nama Produk", p.product_desc as "Deskripsi", p.category_id as "Kategori" from products p where p.product_name ilike $1 order by p.product_name  asc;`;
+//     const values = [`%${query.product_name}%`];
+//     const data = await db.query(sql, values);
 
-    res.status(200).json({
-      msg: "Success find data",
-      result: data.rows,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      msg: "Internal server error",
-    });
-  }
-});
+//     res.status(200).json({
+//       msg: "Success find data",
+//       result: data.rows,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({
+//       msg: "Internal server error",
+//     });
+//   }
+// });
 
 server.get("/products/filter", async (req, res) => {
   try {
