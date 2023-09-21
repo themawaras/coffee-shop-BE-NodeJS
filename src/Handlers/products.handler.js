@@ -1,4 +1,4 @@
-const { showAll, insert, update, del } = require("../Models/products.models");
+const { showAll, insert, update, del, search } = require("../Models/products.models");
 
 const getAllProducts = async (req, res, next) => {
   try {
@@ -59,9 +59,28 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const searchProduct = async (req, res) => {
+  try {
+    const { query } = req;
+
+    const data = await search(query.product_name);
+
+    res.status(200).json({
+      msg: "Success find data",
+      result: data.rows,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      msg: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   getAllProducts,
   addNewProduct,
   updateProduct,
   deleteProduct,
+  searchProduct,
 };

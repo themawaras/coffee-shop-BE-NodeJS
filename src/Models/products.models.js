@@ -23,9 +23,16 @@ const del = (productId) => {
   return db.query(sql, values);
 };
 
+const search = (productName) => {
+  const sql = `select p.product_name as "Nama Produk", p.product_desc as "Deskripsi", p.category_id as "Kategori" from products p where p.product_name ilike $1 order by p.product_name  asc;`;
+  const values = [`%${productName}%`];
+  return db.query(sql, values);
+};
+
 module.exports = {
   showAll,
   insert,
   update,
   del,
+  search,
 };
