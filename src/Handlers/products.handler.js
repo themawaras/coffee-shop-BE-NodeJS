@@ -94,6 +94,23 @@ const filterProduct = async (req, res) => {
   }
 };
 
+const paginationProduct = async (req, res) => {
+  try {
+    const { query } = req;
+
+    const data = await paginationProduct(query.limit, query.offset);
+
+    res.status(200).json({
+      msg: "page retrive",
+      result: data.rows,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "internal server error",
+    });
+  }
+};
+
 module.exports = {
   getAllProducts,
   addNewProduct,
@@ -101,4 +118,5 @@ module.exports = {
   deleteProduct,
   searchProduct,
   filterProduct,
+  paginationProduct,
 };

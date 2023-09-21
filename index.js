@@ -368,20 +368,20 @@ const db = require("./src/Configs/postgres");
 //   }
 // });
 
-server.get("/products/page", async (req, res) => {
-  try {
-    const { query } = req;
-    const sql = `select product_name, product_desc from products limit $1 offset $2;`;
-    const values = [query.limit, query.offset];
-    const data = await db.query(sql, values);
+// server.get("/products/page", async (req, res) => {
+//   try {
+//     const { query } = req;
+//     const sql = `select product_name, product_desc from products limit $1 offset $2;`;
+//     const values = [query.limit, query.offset];
+//     const data = await db.query(sql, values);
 
-    res.status(200).json({
-      msg: "page retrive",
-      result: data.rows,
-    });
-  } catch (error) {
-    res.status(500).json({
-      msg: "internal server error",
-    });
-  }
-});
+//     res.status(200).json({
+//       msg: "page retrive",
+//       result: data.rows,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       msg: "internal server error",
+//     });
+//   }
+// });

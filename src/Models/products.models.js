@@ -47,6 +47,12 @@ const filter = (productName, productSize) => {
   return db.query(sql, values);
 };
 
+const pagination = (limit, offset) => {
+  const sql = `select product_name, product_desc from products limit $1 offset $2;`;
+  const values = [];
+  return db.query(sql, values);
+};
+
 module.exports = {
   showAll,
   insert,
