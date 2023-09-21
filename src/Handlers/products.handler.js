@@ -77,10 +77,28 @@ const searchProduct = async (req, res) => {
   }
 };
 
+const filterProduct = async (req, res) => {
+  try {
+    const { query } = req;
+
+    const data = await filter(query.product_name, query.product_price);
+
+    res.status(200).json({
+      msg: "success filter data",
+      result: data.rows,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   getAllProducts,
   addNewProduct,
   updateProduct,
   deleteProduct,
   searchProduct,
+  filterProduct,
 };

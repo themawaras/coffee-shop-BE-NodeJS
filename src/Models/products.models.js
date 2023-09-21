@@ -29,10 +29,29 @@ const search = (productName) => {
   return db.query(sql, values);
 };
 
+const filter = (productName, productSize) => {
+  const sql = `select 
+        pd.detail_id as "ID Produk",
+        p.product_name as "Nama Produk",
+        p.product_desc as "Deskripsi",
+        c.category_name  as "Kategori",
+        pd.product_price as "Harga"
+    from product_details pd
+    join products p on pd.product_id = p.product_id 
+    join categories c on c.category_id = p.product_id 
+    where pd.product_price <= $2
+    and p.product_name ilike $1
+    order by pd.product_price asc
+    ;`;
+  const values = [`%${productName}%`, productSize];
+  return db.query(sql, values);
+};
+
 module.exports = {
   showAll,
   insert,
   update,
   del,
   search,
+  filter,
 };

@@ -338,35 +338,35 @@ const db = require("./src/Configs/postgres");
 //   }
 // });
 
-server.get("/products/filter", async (req, res) => {
-  try {
-    const { query } = req;
-    const sql = `select 
-        pd.detail_id as "ID Produk",
-        p.product_name as "Nama Produk",
-        p.product_desc as "Deskripsi",
-        c.category_name  as "Kategori",
-        pd.product_price as "Harga"
-    from product_details pd
-    join products p on pd.product_id = p.product_id 
-    join categories c on c.category_id = p.product_id 
-    where pd.product_price <= $2
-    and p.product_name ilike $1
-    order by pd.product_price asc
-    ;`;
-    const values = [`%${query.product_name}%`, query.product_price];
-    const data = await db.query(sql, values);
+// server.get("/products/filter", async (req, res) => {
+//   try {
+//     const { query } = req;
+//     const sql = `select
+//         pd.detail_id as "ID Produk",
+//         p.product_name as "Nama Produk",
+//         p.product_desc as "Deskripsi",
+//         c.category_name  as "Kategori",
+//         pd.product_price as "Harga"
+//     from product_details pd
+//     join products p on pd.product_id = p.product_id
+//     join categories c on c.category_id = p.product_id
+//     where pd.product_price <= $2
+//     and p.product_name ilike $1
+//     order by pd.product_price asc
+//     ;`;
+//     const values = [`%${query.product_name}%`, query.product_price];
+//     const data = await db.query(sql, values);
 
-    res.status(200).json({
-      msg: "success filter data",
-      result: data.rows,
-    });
-  } catch (error) {
-    res.status(500).json({
-      msg: "Internal server error",
-    });
-  }
-});
+//     res.status(200).json({
+//       msg: "success filter data",
+//       result: data.rows,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       msg: "Internal server error",
+//     });
+//   }
+// });
 
 server.get("/products/page", async (req, res) => {
   try {
