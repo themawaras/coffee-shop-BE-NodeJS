@@ -17,6 +17,7 @@ const getAllProducts = async (req, res, next) => {
 const addNewProduct = async (req, res) => {
   try {
     const { body } = req;
+    if (!body.product_name || !body.product_stock || !body.product_desc || !body.category_id) return res.status(400).json({ msg: "field cannot be empty" });
     const data = await insert(body.product_name, body.product_stock, body.product_desc, body.Image_id, body.category_id);
     res.status(201).json({
       msg: "Product input success",
@@ -33,11 +34,12 @@ const addNewProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { body, params } = req;
-    await update(body.product_name, params.product_id);
+    await update(body.product_name, body.product_stock, body.product_desc, body.product_category, params.product_id);
     res.status(200).json({
       msg: `Nama produk untuk id ${params.product_id} berubah menjadi ${body.product_name}`,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       msg: "Internal server error",
     });
