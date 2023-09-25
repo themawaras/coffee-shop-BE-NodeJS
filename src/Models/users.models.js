@@ -5,11 +5,11 @@ const showAll = () => {
   return db.query(sql);
 };
 
-const insert = (UserFullname, userEmail, userPhone, userPassword, userAddress, userAdmin) => {
-  const sql = `insert into users (user_fullname, user_email, user_phone, user_password, user_address, user_admin) values ($1, $2, $3, $4, $5, $6) returning user_id, user_fullname, user_email, user_phone, user_address, user_admin`;
-  const values = [UserFullname, userEmail, userPhone, userPassword, userAddress, userAdmin];
-  return db.query(sql, values);
-};
+// const insert = (UserFullname, userEmail, userPhone, userPassword, userAddress, userAdmin) => {
+//   const sql = `insert into users (user_fullname, user_email, user_phone, user_password, user_address, user_admin) values ($1, $2, $3, $4, $5, $6) returning user_id, user_fullname, user_email, user_phone, user_address, user_admin`;
+//   const values = [UserFullname, userEmail, userPhone, userPassword, userAddress, userAdmin];
+//   return db.query(sql, values);
+// };
 
 const update = (userFullname, userAddress, userId) => {
   const sql = `update users set user_fullname = $1, user_address = $2, updated_at = now() where user_id = $3 returning user_fullname, user_email, user_phone, user_address`;
@@ -25,7 +25,7 @@ const del = (userId) => {
 
 module.exports = {
   showAll,
-  insert,
+  // insert,
   update,
   del,
 };

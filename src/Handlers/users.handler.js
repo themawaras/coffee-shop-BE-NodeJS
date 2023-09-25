@@ -16,23 +16,23 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const addNewUser = async (req, res) => {
-  try {
-    const { body } = req;
+// const addNewUser = async (req, res) => {
+//   try {
+//     const { body } = req;
 
-    const data = await insert(body.user_fullname, body.user_email, body.user_phone, body.user_password, body.user_address, body.user_admin);
+//     const data = await insert(body.user_fullname, body.user_email, body.user_phone, body.user_password, body.user_address, body.user_admin);
 
-    res.status(201).json({
-      msg: "Success input user",
-      result: data.rows,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      msg: "Internal server error",
-    });
-  }
-};
+//     res.status(201).json({
+//       msg: "Success input user",
+//       result: data.rows,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({
+//       msg: "Internal server error",
+//     });
+//   }
+// };
 
 const updateUser = async (req, res) => {
   try {
@@ -69,7 +69,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
   getAllUsers,
-  addNewUser,
+  // addNewUser,
   updateUser,
   deleteUser,
 };

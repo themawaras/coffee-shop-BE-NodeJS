@@ -5,7 +5,7 @@ const { getAllUsers, addNewUser, updateUser, deleteUser } = require("../Handlers
 
 userRouter.get("/", getAllUsers);
 
-userRouter.post("/", addNewUser);
+// userRouter.post("/", addNewUser);
 
 userRouter.patch("/:user_id", updateUser);
 
