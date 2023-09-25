@@ -11,10 +11,10 @@ mainRouter.get("/", (req, res, next) => {
   res.send("Welcome to Fazz Coffee Shop!");
 });
 
-const { isLogin } = require("../Middlewares/authorization");
+const { isLogin, isRole } = require("../Middlewares/authorization");
 
 mainRouter.use("/products", productRouter);
-mainRouter.use("/promos", isLogin, promoRouter);
+mainRouter.use("/promos", promoRouter);
 mainRouter.use("/users", userRouter);
 mainRouter.use("/orders", orderRouter);
 mainRouter.use("/auth", authRouter);

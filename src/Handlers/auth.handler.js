@@ -47,11 +47,11 @@ const login = async (req, res) => {
       return res.status(401).json({
         msg: "Email or password is wrong",
       });
-    console.log(email);
-    console.log(user_fullname);
+
     const payload = {
       user_fullname,
       email,
+      role,
     };
 
     jwt.sign(
@@ -69,7 +69,6 @@ const login = async (req, res) => {
             token,
             userInfo: user_fullname,
             email,
-            role,
           },
         });
       }

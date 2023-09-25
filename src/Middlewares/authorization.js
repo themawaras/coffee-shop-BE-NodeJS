@@ -13,11 +13,15 @@ const isLogin = (req, res, next) => {
       switch (err) {
         case "TokenExpiredError":
           return res.status(401).json({
-            msg: "Token access expired, please re-login",
+            msg: "Your session has expired, please login again",
           });
         case "NotBeforeError":
           return res.status(401).json({
             msg: "Your access not started yet, please access on time",
+          });
+        case "JsonWebTokenError":
+          return res.status(401).json({
+            msg: "Your session has expired, please login again",
           });
       }
     }
@@ -26,7 +30,11 @@ const isLogin = (req, res, next) => {
   });
 };
 
-const isRole = () => {};
+const isRole = (req, res, next) => {
+  const { role } = req.userInfo;
+  if (role !== true) return res.status(404).json({ msg: "Page is not found" });
+  next();
+};
 
 module.exports = {
   isLogin,
