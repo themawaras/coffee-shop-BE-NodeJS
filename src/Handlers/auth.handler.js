@@ -31,24 +31,29 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { body } = req;
+  const {
+    body: { email, password },
+  } = req;
 
   try {
-    const result = await getPwd(body.email);
+    const result = await getPwd(email);
     if (!result.rows.length)
       return res.status(404).json({
         msg: "Email or password is wrong",
       });
     const { user_password, user_fullname } = result.rows[0];
-    const isValid = await argon.verify(user_password, body.password);
+    const isValid = await argon.verify(user_password, password);
     if (!isValid)
       return res.status(401).json({
         msg: "Email or password is wrong",
       });
+    console.log(email);
+    console.log(user_fullname);
     const payload = {
       user_fullname,
       email,
     };
+
     jwt.sign(
       payload,
       jwtKey,
@@ -63,7 +68,7 @@ const login = async (req, res) => {
           data: {
             token,
             userInfo: user_fullname,
-            user_email,
+            email,
           },
         });
       }
