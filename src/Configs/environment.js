@@ -4,4 +4,5 @@ module.exports = {
   dbUser: process.env.DB_USER,
   dbPass: process.env.DB_PASS,
   jwtKey: process.env.JWT_KEY,
+  jwtIssuer: process.env.JWT_ISSUER,
 };
