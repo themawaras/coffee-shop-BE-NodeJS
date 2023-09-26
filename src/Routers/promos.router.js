@@ -2,7 +2,7 @@ const express = require("express");
 const promoRouter = express.Router();
 
 const { getAllPromos, addNewPromo, updatePromo, deletePromo } = require("../Handlers/promos.handler");
-const {} = require("../Middlewares/authorization");
+const { isLogin, isRole } = require("../Middlewares/authorization");
 
 promoRouter.get("/", getAllPromos);
 

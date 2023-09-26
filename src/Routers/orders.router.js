@@ -2,7 +2,7 @@ const express = require("express");
 const orderRouter = express.Router();
 
 const { getAllOrders, addNewOrder, updateOrder, deleteOrder } = require("../Handlers/orders.handler");
-const {} = require("../Middlewares/authorization");
+const { isLogin, isRole } = require("../Middlewares/authorization");
 
 orderRouter.get("/", getAllOrders);
 

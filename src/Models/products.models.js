@@ -1,8 +1,23 @@
 const db = require("../Configs/postgres");
 
-const showAll = () => {
-  const sql = 'select p.product_name as "Nama Produk", p.product_desc as "Deskripsi", p.category_id as "Kategori", p.product_stock as "Stok", p.image_id as "Gambar" from products p order by p.category_id;';
-  return db.query(sql);
+const showAll = (page = 1, limit = 3) => {
+  const sql = `select p.product_id as "No", p.product_name "Product Name", 
+	p.product_stock as "Stock", p.product_desc as "Description",
+	c.category_name as "Category"
+	from products p 
+	join categories c on p.category_id = c.category_id
+  order by p.category_id 
+  limit $1 offset $2;`;
+  const offset = (page - 1) * limit;
+  const values = [limit, offset];
+  return db.query(sql, values);
+};
+
+const countData = (queries) => {
+  let sql = `select count(*) as "total_products" from products`;
+  const values = [];
+
+  return db.query(sql, values);
 };
 
 const insert = (productName, productStock, productDesc, imageId, categoryId) => {
@@ -60,4 +75,12 @@ module.exports = {
   del,
   search,
   filter,
+  countData,
 };
+
+// if (queries.page && queries.limit) {
+//   sql += ` limit $${values.length + 1} offset $${values.length + 2}`;
+//   const offset = (parseInt(queries.page) - 1) * parseInt(queries.limit);
+//   values.push(parseInt(queries.limit), offset);
+// }
+// sql += `) p`;

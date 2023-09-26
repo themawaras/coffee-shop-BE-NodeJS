@@ -1,13 +1,37 @@
-const { showAll, insert, update, del, search } = require("../Models/products.models");
+const { showAll, insert, update, del, search, countData } = require("../Models/products.models");
 
-const getAllProducts = async (req, res, next) => {
+const getAllProducts = async (req, res) => {
   try {
-    const result = await showAll();
+    const { query } = req;
+    const result = await showAll(query.page, query.limit);
+    if (!result.rows.length)
+      return res.status(404).json({
+        msg: "page not found",
+        result: [],
+      });
+    const metaResult = await countData({
+      page: query.page,
+      limit: query.limit,
+    });
+
+    const totalData = parseInt(metaResult.rows[0].total_products);
+    const totalPage = Math.ceil(totalData / parseInt(query.limit));
+    const isLastPage = parseInt(query.page) > totalPage;
+
+    const meta = {
+      page: parseInt(query.page),
+      totalData,
+      totalPage,
+      next: isLastPage ? null : `${req.baseUrl}?page=${parseInt(query.page) + 1}&limit=${parseInt(query.limit)}`,
+      prev: parseInt(query.page) === 1 ? null : `${req.baseUrl}?page=${parseInt(query.page) - 1}&limit=${parseInt(query.limit)}`,
+    };
     res.status(200).json({
       msg: "Success data retrieve",
       result: result.rows,
+      meta,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       msg: "Internal server error",
     });
