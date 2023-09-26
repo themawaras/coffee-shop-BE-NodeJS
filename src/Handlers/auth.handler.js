@@ -7,7 +7,7 @@ const register = async (req, res) => {
   try {
     const { body } = req;
     const hashedPassword = await argon.hash(body.user_password);
-    const data = await createUser(body.user_fullname, body.user_email, body.user_phone, hashedPassword, body.user_address, body.user_admin);
+    const data = await createUser(body.user_fullname, body.user_email, body.user_phone, hashedPassword, body.user_address);
 
     res.status(201).json({
       msg: "Success input user",
@@ -41,7 +41,7 @@ const login = async (req, res) => {
       return res.status(404).json({
         msg: "Email or password is wrong",
       });
-    const { user_password, user_fullname, role } = result.rows[0];
+    const { user_password, ID, userName, isAdmin } = result.rows[0];
     const isValid = await argon.verify(user_password, password);
     if (!isValid)
       return res.status(401).json({
@@ -49,9 +49,8 @@ const login = async (req, res) => {
       });
 
     const payload = {
-      user_fullname,
-      email,
-      role,
+      ID,
+      isAdmin,
     };
 
     jwt.sign(
@@ -64,10 +63,10 @@ const login = async (req, res) => {
       (err, token) => {
         if (err) throw err;
         res.status(200).json({
-          msg: `Welcome ${user_fullname}!`,
+          msg: `Welcome ${userName}!`,
           data: {
             token,
-            userInfo: user_fullname,
+            userInfo: userName,
             email,
           },
         });

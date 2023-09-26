@@ -9,7 +9,7 @@ productRouter.get("/", getAllProducts);
 
 productRouter.post("/", isLogin, isRole, addNewProduct);
 
-productRouter.patch("/:product_id", isLogin, isRole, updateProduct);
+productRouter.patch("/:product_id", updateProduct);
 
 productRouter.delete("/:product_id", isLogin, isRole, deleteProduct);
 

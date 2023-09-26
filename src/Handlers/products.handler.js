@@ -22,8 +22,8 @@ const getAllProducts = async (req, res) => {
       page: parseInt(query.page),
       totalData,
       totalPage,
-      next: isLastPage ? null : `${req.baseUrl}?page=${parseInt(query.page) + 1}&limit=${parseInt(query.limit)}`,
-      prev: parseInt(query.page) === 1 ? null : `${req.baseUrl}?page=${parseInt(query.page) - 1}&limit=${parseInt(query.limit)}`,
+      next: isLastPage ? null : `http://localhost:8000${req.baseUrl}?page=${parseInt(query.page) + 1}&limit=${parseInt(query.limit)}`,
+      prev: parseInt(query.page) === 1 ? null : `http://localhost:8000${req.baseUrl}?page=${parseInt(query.page) - 1}&limit=${parseInt(query.limit)}`,
     };
     res.status(200).json({
       msg: "Success data retrieve",
@@ -58,7 +58,8 @@ const addNewProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { body, params } = req;
-    await update(body.product_name, body.product_stock, body.product_desc, body.product_category, params.product_id);
+
+    const result = await update(body, params.product_id);
     res.status(200).json({
       msg: `Nama produk untuk id ${params.product_id} berubah menjadi ${body.product_name}`,
     });

@@ -26,9 +26,26 @@ const insert = (productName, productStock, productDesc, imageId, categoryId) => 
   return db.query(sql, values);
 };
 
-const update = (productName, stock, desc, category, productId) => {
-  const sql = `update products set product_name = $1, product_stock = $2, product_desc = $3, category_id = $4, updated_at = now() where product_id = $5`;
-  const values = [productName, stock, desc, category, productId];
+// const update = (productName, stock, desc, category, productId) => {
+//   const sql = `update products set product_name = $1, product_stock = $2, product_desc = $3, category_id = $4, updated_at = now() where product_id = $5`;
+//   const values = [productName, stock, desc, category, productId];
+//   return db.query(sql, values);
+// };
+
+const update = (body, params) => {
+  let sql = `update products set `;
+  values = [];
+  let i = 1;
+  for (const [key, value] of Object.entries(body)) {
+    if (value !== "") {
+      sql += `$${key} = $${i}`;
+      values.push(value);
+      i++;
+    }
+  }
+
+  sql += `updated_at = now() where product_id = $${i} returning *`;
+  values.push(params.product_id);
   return db.query(sql, values);
 };
 
