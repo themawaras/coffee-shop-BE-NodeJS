@@ -8,6 +8,8 @@ const morgan = require("morgan");
 // generate express application
 const server = express();
 
+server.use(express.static("./public"));
+
 // parser for  json & form url encoded
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));

@@ -7,11 +7,19 @@ const userRouter = require("./users.router");
 const orderRouter = require("./orders.router");
 const authRouter = require("./auth.router");
 
+// const { isLogin, isRole } = require("../Middlewares/authorization");
+const { singleUpload } = require("../Middlewares/diskUpload");
+
 mainRouter.get("/", (req, res, next) => {
   res.send("Welcome to Fazz Coffee Shop!");
 });
 
-const { isLogin, isRole } = require("../Middlewares/authorization");
+mainRouter.post("/upload", singleUpload("image"), (req, res) => {
+  console.log(req.file);
+  res.status(200).json({
+    msg: "Uploaded",
+  });
+});
 
 mainRouter.use("/products", productRouter);
 mainRouter.use("/promos", promoRouter);
