@@ -3,38 +3,69 @@ const { showAll, insert, update, del, search, countData } = require("../Models/p
 const getAllProducts = async (req, res) => {
   try {
     const { query } = req;
-    const result = await showAll(query.page, query.limit);
-    if (!result.rows.length)
-      return res.status(404).json({
-        msg: "page not found",
-        result: [],
+    let result;
+    if (query.name || query.category || query.minrange || query.maxrange || query.page || query.limit) {
+      if (query.minrange >= query.maxrange) {
+        return res.status(400).json({
+          msg: "The range your input is not correct!",
+        });
+      }
+
+      result = await filtersProducts(query.name, query.category, query.minrange, query.maxrange, query.page, query.limit);
+
+      if (result.rows.length == 0) {
+        return res.status(200).json({
+          msg: "Products not found!",
+          result: [],
+        });
+      }
+
+      const metaResult = await count(query.name, query.category, query.minrange, query.maxrange);
+
+      const totalData = metaResult.rows[0].count;
+      const isLastPage = Math.ceil(totalData / parseInt(query.limit) <= parseInt(query.page));
+
+      let linkNext = `${req.baseUrl}?page=${parseInt(query.page) + 1}&limit=${parseInt(query.limit)}`;
+
+      if (query.name) linkNext += `&name=${query.name}`;
+      if (query.category) linkNext += `&category=${query.category}`;
+      if (query.minrange && query.maxrange) linkNext += `&minrange=${query.minrange}&maxrange=${query.maxrange}`;
+
+      let linkPrev = `${req.baseUrl}?page=${parseInt(query.page) - 1}&limit=${parseInt(query.limit)}`;
+
+      if (query.name) linkPrev += `&name=${query.name}`;
+      if (query.category) linkPrev += `&category=${query.category}`;
+      if (query.minrange && query.maxrange) linkPrev += `&minrange=${query.minrange}&maxrange=${query.maxrange}`;
+
+      return res.status(200).json({
+        msg: "Success",
+        result: result.rows,
+        meta: {
+          page: query.page,
+          totalData,
+          next: isLastPage ? null : linkNext,
+          prev: query.page == "1" ? null : linkPrev,
+        },
       });
-    const metaResult = await countData({
-      page: query.page,
-      limit: query.limit,
-    });
+    }
 
-    const totalData = parseInt(metaResult.rows[0].total_products);
-    const totalPage = Math.ceil(totalData / parseInt(query.limit));
-    const isLastPage = parseInt(query.page) > totalPage;
+    result = await getAll();
 
-    const meta = {
-      page: parseInt(query.page),
-      totalData,
-      totalPage,
-      next: isLastPage ? null : `http://localhost:8000${req.baseUrl}?page=${parseInt(query.page) + 1}&limit=${parseInt(query.limit)}`,
-      prev: parseInt(query.page) === 1 ? null : `http://localhost:8000${req.baseUrl}?page=${parseInt(query.page) - 1}&limit=${parseInt(query.limit)}`,
-    };
+    if (result.rows.length == 0) {
+      return res.status(404).json({
+        msg: "Products not found!",
+      });
+    }
+
     res.status(200).json({
-      msg: "Success data retrieve",
+      msg: "Success",
       result: result.rows,
-      meta,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
     res.status(500).json({
-      msg: "Internal server error",
+      msg: "Internal Server Error",
     });
+    console.log(error);
   }
 };
 

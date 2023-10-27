@@ -17,10 +17,14 @@ const storage = multer.diskStorage({
 const diskUpload = multer({
   storage,
   limits: {
-    fileSize: 1e6,
+    fileSize: 2e6,
   },
   fileFilter: (req, res, cb) => {
-    cb(null, true);
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb(null, true);
+    }
   },
 });
 
